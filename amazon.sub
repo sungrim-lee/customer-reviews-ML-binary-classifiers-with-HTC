@@ -1,0 +1,23 @@
+# Before running this with "condor_submit sentiment.sub", the
+# directories log, error, and output must exist.
+# if there is no 'list_of_tsv_files' run prejob1.sh first before running jobs
+
+universe = vanilla
+log    =    log/amazon-chtc_$(Cluster)_$(Process).log
+error  =  error/amazon-chtc_$(Cluster)_$(Process).err
+output = output/amazon-chtc_$(Cluster)_$(Process).out
+
+executable = ./amazon.sh
+
+# The arguments below are:
+arguments = $(tsv)
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = http://proxy.chtc.wisc.edu/SQUID/chtc/R402.tar.gz, amazonML.py, amazonFn.py, list_of_tsv_files
+
+request_cpus = 1
+request_memory = 40GB
+request_disk = 15GB
+
+queue tsv from list_of_tsv_files
